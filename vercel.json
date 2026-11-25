@@ -3,11 +3,5 @@
     { "source": "/webhook", "destination": "/api/webhook" },
     { "source": "/telegram", "destination": "/api/telegram" },
     { "source": "/health", "destination": "/api/health" }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron/check-views",
-      "schedule": "*/5 * * * *"
-    }
   ]
 }
