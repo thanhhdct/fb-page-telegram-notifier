@@ -7,7 +7,8 @@
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "vercel:dev": "vercel dev",
-    "telegram:set-webhook": "node scripts/set-telegram-webhook.js"
+    "telegram:set-webhook": "node scripts/set-telegram-webhook.js",
+    "telegram:set-commands": "node scripts/set-telegram-commands.js"
   },
   "engines": {
     "node": ">=18"

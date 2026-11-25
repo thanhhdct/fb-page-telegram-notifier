@@ -5,6 +5,7 @@ import {
   registerAppPageWebhook,
   getTelegramWebhookInfo,
   diagnoseTelegramToken,
+  registerTelegramBotCommands,
 } from '../lib/setupWebhooks.js';
 
 function authorized(req) {
@@ -31,7 +32,7 @@ export default async function handler(req, res) {
   const out = {
     ok: true,
     facebook: { callbackUrl: `${base}/webhook`, verifyEndpoint: null, appSubscription: null, pages: null },
-    telegram: { diagnose: null, setWebhook: null, info: null },
+    telegram: { diagnose: null, setWebhook: null, setCommands: null, info: null },
     errors: [],
   };
 
@@ -62,6 +63,7 @@ export default async function handler(req, res) {
   try {
     if (out.telegram.diagnose?.ok) {
       out.telegram.setWebhook = await setTelegramWebhook();
+      out.telegram.setCommands = await registerTelegramBotCommands();
     } else {
       out.errors.push({
         step: 'telegram.setWebhook',

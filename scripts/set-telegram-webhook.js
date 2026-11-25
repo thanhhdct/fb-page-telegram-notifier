@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import axios from 'axios';
+import { setTelegramBotCommands } from '../lib/telegramCommands.js';
 
 const { TG_BOT_TOKEN, PUBLIC_BASE_URL } = process.env;
 
@@ -15,4 +16,7 @@ const res = await axios.post(`https://api.telegram.org/bot${TG_BOT_TOKEN}/setWeb
   allowed_updates: ['message'],
 });
 
-console.log(res.data);
+console.log('setWebhook', res.data);
+
+const cmds = await setTelegramBotCommands();
+console.log('setMyCommands', cmds);
