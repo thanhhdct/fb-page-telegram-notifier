@@ -1,6 +1,6 @@
 # FB Page → Telegram Notifier
 
-Gửi Telegram khi **có tin nhắn mới** trên Facebook Page hoặc khi **bài viết đạt 500 / 1.000 view** (`post_media_view`).
+Gửi Telegram khi **có tin nhắn mới** trên Page hoặc khi bài viết chạm mốc **500 / 1K / 5K / 10K view** (`post_media_view`).
 
 Hỗ trợ **deploy Vercel** (serverless + Cron) hoặc chạy local bằng Express.
 

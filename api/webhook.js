@@ -1,6 +1,6 @@
 import { waitUntil } from '@vercel/functions';
 import { FB_VERIFY_TOKEN } from '../lib/config.js';
-import { handlePageMessagingWebhook } from '../lib/checkViews.js';
+import { handlePageMessagingWebhook } from '../lib/pageMessages.js';
 
 export const config = {
   maxDuration: 60,

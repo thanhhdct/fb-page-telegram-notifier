@@ -1,9 +1,12 @@
 import 'dotenv/config';
 import express from 'express';
 import { FB_VERIFY_TOKEN } from '../lib/config.js';
-import { check500And1kViews, handlePageMessagingWebhook } from '../lib/checkViews.js';
+import { scanViewMilestones } from '../lib/viewMilestones.js';
+import { handlePageMessagingWebhook } from '../lib/pageMessages.js';
 import { sendTelegram } from '../lib/telegram.js';
 import { getPages } from '../lib/facebook.js';
+import { VIEW_MILESTONES } from '../lib/config.js';
+import { formatMilestoneList } from '../lib/format.js';
 
 const { PORT = 3000, CHECK_INTERVAL_MINUTES = '5' } = process.env;
 
@@ -11,12 +14,8 @@ const app = express();
 app.use(express.json());
 
 app.get('/health', async (_req, res) => {
-  try {
-    const pages = await getPages();
-    res.json({ ok: true, pages: pages.length, runtime: 'local' });
-  } catch {
-    res.json({ ok: true, pages: 0, runtime: 'local' });
-  }
+  const pages = await getPages().catch(() => []);
+  res.json({ ok: true, pages: pages.length, runtime: 'local' });
 });
 
 app.get('/webhook', (req, res) => {
@@ -41,21 +40,21 @@ app.post('/telegram', async (req, res) => {
 
   const cmd = msg.text.trim();
   if (cmd === '/check' || cmd.startsWith('/check@')) {
-    await check500And1kViews(msg.chat.id, true);
+    await scanViewMilestones(msg.chat.id, true);
   } else if (cmd === '/start' || cmd.startsWith('/start@')) {
     await sendTelegram(
-      'Bot FB Page Notifier.\nLệnh: <code>/check</code> — quét mốc 500 / 1k view ngay.',
+      `FB Page Notifier.\nMốc view: ${formatMilestoneList(VIEW_MILESTONES)}\nLệnh: /check`,
       msg.chat.id
     );
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Local server http://localhost:${PORT} (use vercel dev for parity)`);
+  console.log(`http://localhost:${PORT}`);
 
   const intervalMin = Number(CHECK_INTERVAL_MINUTES);
   if (intervalMin > 0 && process.env.FB_LONG_USER_TOKEN) {
-    setTimeout(() => check500And1kViews().catch(console.error), 10000);
-    setInterval(() => check500And1kViews().catch(console.error), intervalMin * 60 * 1000);
+    setTimeout(() => scanViewMilestones().catch(console.error), 10_000);
+    setInterval(() => scanViewMilestones().catch(console.error), intervalMin * 60_000);
   }
 });
