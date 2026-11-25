@@ -1,12 +1,12 @@
 {
   "name": "fb-page-telegram-notifier",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Telegram notifications for Facebook Page messages and post view milestones (500 / 1k)",
   "type": "module",
-  "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
+    "vercel:dev": "vercel dev",
     "telegram:set-webhook": "node scripts/set-telegram-webhook.js"
   },
   "engines": {
@@ -16,12 +16,17 @@
     "facebook",
     "telegram",
     "webhook",
-    "notifications"
+    "vercel"
   ],
   "license": "MIT",
   "dependencies": {
+    "@upstash/redis": "^1.41.1",
+    "@vercel/functions": "^2.0.0",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "vercel": "^39.0.0"
   }
 }
