@@ -6,6 +6,8 @@ import {
   getTelegramWebhookInfo,
   diagnoseTelegramToken,
   registerTelegramBotCommands,
+  getFacebookTokenScopes,
+  getFacebookAppSubscriptions,
 } from '../lib/setupWebhooks.js';
 
 function authorized(req) {
@@ -31,7 +33,15 @@ export default async function handler(req, res) {
   const base = (process.env.PUBLIC_BASE_URL || '').replace(/\/$/, '');
   const out = {
     ok: true,
-    facebook: { callbackUrl: `${base}/webhook`, verifyEndpoint: null, appSubscription: null, pages: null },
+    facebook: {
+      callbackUrl: `${base}/webhook`,
+      verifyEndpoint: null,
+      tokenScopes: null,
+      subscriptionsBefore: null,
+      appSubscription: null,
+      subscriptionsAfter: null,
+      pages: null,
+    },
     telegram: { diagnose: null, setWebhook: null, setCommands: null, info: null },
     errors: [],
   };
@@ -40,6 +50,19 @@ export default async function handler(req, res) {
     out.facebook.verifyEndpoint = await verifyFacebookCallbackReachable();
   } catch (e) {
     out.errors.push({ step: 'facebook.verify', message: e.message, detail: e.response?.data });
+  }
+
+  try {
+    out.facebook.tokenScopes = await getFacebookTokenScopes();
+  } catch (e) {
+    out.errors.push({ step: 'facebook.tokenScopes', message: e.message, detail: e.response?.data });
+  }
+
+  try {
+    const appId = out.facebook.tokenScopes?.appId;
+    out.facebook.subscriptionsBefore = await getFacebookAppSubscriptions(appId);
+  } catch (e) {
+    out.errors.push({ step: 'facebook.subscriptionsBefore', message: e.message, detail: e.response?.data });
   }
 
   try {
@@ -52,6 +75,13 @@ export default async function handler(req, res) {
     out.facebook.pages = await subscribeAllPages();
   } catch (e) {
     out.errors.push({ step: 'facebook.pages', message: e.message, detail: e.response?.data });
+  }
+
+  try {
+    const appId = out.facebook.tokenScopes?.appId || out.facebook.appSubscription?.appId;
+    out.facebook.subscriptionsAfter = await getFacebookAppSubscriptions(appId);
+  } catch (e) {
+    out.errors.push({ step: 'facebook.subscriptionsAfter', message: e.message, detail: e.response?.data });
   }
 
   try {

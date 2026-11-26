@@ -16,6 +16,8 @@ Hỗ trợ **deploy Vercel** (serverless + Cron) hoặc chạy local bằng Expr
 | Biến | Mô tả |
 |------|--------|
 | `FB_LONG_USER_TOKEN` | User access token dài hạn |
+| `FB_APP_ID` | App ID (Meta → Settings → Basic) |
+| `FB_APP_SECRET` | App Secret — bắt buộc để tự đăng ký webhook qua `/api/setup-webhooks` |
 | `FB_VERIFY_TOKEN` | Token verify webhook Meta |
 | `TG_BOT_TOKEN` | Token bot Telegram |
 | `TG_CHAT_ID` | Chat nhận thông báo |
@@ -61,11 +63,18 @@ npm start          # Express + interval (không cần KV, dùng state.json)
 npm run vercel:dev # Giống production serverless
 ```
 
-## Facebook Webhook
+## Facebook Webhook (tin nhắn Messenger tới Page)
 
-1. App → **Webhooks** → **Page** → Callback `https://<host>/webhook`
-2. Verify token = `FB_VERIFY_TOKEN`
-3. Subscribe **messages**
+**Lưu ý:** Chỉ bắt **tin nhắn inbox Messenger** của Page, không phải comment bài viết.
+
+1. Vercel: thêm `FB_APP_ID`, `FB_APP_SECRET`, redeploy.
+2. Gọi một lần (dùng `WEBHOOK_SETUP_KEY` hoặc `CRON_SECRET` trên Vercel):
+
+   `POST https://<app>.vercel.app/api/setup-webhooks?key=<WEBHOOK_SETUP_KEY>`
+
+3. Kiểm tra JSON trả về: `facebook.verifyEndpoint.ok === true`, `facebook.appSubscription.ok === true`, `facebook.pages` phần lớn `ok: true`.
+
+Hoặc thủ công trên Meta: App → **Webhooks** → **Page** → Callback `https://<host>/webhook`, verify token = `FB_VERIFY_TOKEN`, subscribe **messages**, rồi subscribe app cho từng Page.
 
 ## Lệnh Telegram
 

@@ -18,6 +18,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
+    console.log('[Webhook] POST', req.body?.object, 'entries', req.body?.entry?.length ?? 0);
     waitUntil(
       handlePageMessagingWebhook(req.body).catch((e) => console.error('[Webhook POST]', e))
     );
