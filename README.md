@@ -78,7 +78,7 @@ Hoặc thủ công trên Meta: App → **Webhooks** → **Page** → Callback `h
 
 ## Lệnh Telegram
 
-- `/check` — quét mốc view 100 / 500 / 1K / 5K / 10K ngay  
+- `/check` — quét mốc view 100 / 500 / 1K / 5K / 10K ngay; gửi thêm **chi tiết quét** (view API, mốc đã báo) trên Telegram  
 - `/start` — hướng dẫn
 
 ## License
