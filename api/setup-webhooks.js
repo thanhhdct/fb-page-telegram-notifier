@@ -8,6 +8,7 @@ import {
   registerTelegramBotCommands,
   getFacebookTokenScopes,
   getFacebookAppSubscriptions,
+  probeViewCronEndpoint,
 } from '../lib/setupWebhooks.js';
 
 function authorized(req) {
@@ -43,6 +44,7 @@ export default async function handler(req, res) {
       pages: null,
     },
     telegram: { diagnose: null, setWebhook: null, setCommands: null, info: null },
+    views: { cronProbe: null },
     errors: [],
   };
 
@@ -109,6 +111,12 @@ export default async function handler(req, res) {
     out.telegram.info = await getTelegramWebhookInfo();
   } catch (e) {
     out.errors.push({ step: 'telegram.info', message: e.message, detail: e.response?.data });
+  }
+
+  try {
+    out.views.cronProbe = await probeViewCronEndpoint();
+  } catch (e) {
+    out.errors.push({ step: 'views.cronProbe', message: e.message, detail: e.response?.data });
   }
 
   if (out.errors.length) out.ok = out.errors.length < 5;

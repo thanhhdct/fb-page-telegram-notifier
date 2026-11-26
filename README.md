@@ -49,10 +49,19 @@ npm run telegram:set-webhook
 | `GET /health` | Kiểm tra nhanh |
 | `/api/cron/check-views` | Quét mốc view (Cron) |
 
-Cron trong `vercel.json`: mỗi 5 phút. **Gói Hobby** có giới hạn cron — nếu không chạy đủ dày, dùng Pro hoặc [cron-job.org](https://cron-job.org) gọi:
+**View không có webhook Facebook** — chỉ tin nhắn Page dùng `/webhook`. Mốc view cần **gọi định kỳ** API quét:
 
 `GET https://<app>.vercel.app/api/cron/check-views`  
 Header: `Authorization: Bearer <CRON_SECRET>`
+
+**Khuyến nghị (Vercel Hobby):** GitHub Actions trong repo (`.github/workflows/check-views.yml`), mỗi 5 phút. Thêm **Repository secrets**:
+
+- `PUBLIC_BASE_URL` = `https://<app>.vercel.app`
+- `CRON_SECRET` = giống biến trên Vercel
+
+Sau khi push workflow lên GitHub, vào **Actions → Scan view milestones → Run workflow** để thử.
+
+Hoặc [cron-job.org](https://cron-job.org) với URL + header trên. Gói **Vercel Pro** có thể thêm `crons` trong `vercel.json` (đã bỏ trên Hobby).
 
 ## Chạy local
 
