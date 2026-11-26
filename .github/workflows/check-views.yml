@@ -6,8 +6,8 @@ name: Scan view milestones
 
 on:
   schedule:
-    # GitHub Actions: tối thiểu ~5 phút; lịch thực tế có thể trễ vài phút.
-    - cron: '*/5 * * * *'
+    # Mỗi giờ (phút 0); lịch có thể trễ vài phút tùy tải Actions.
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 concurrency:

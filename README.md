@@ -54,7 +54,7 @@ npm run telegram:set-webhook
 `GET https://<app>.vercel.app/api/cron/check-views`  
 Header: `Authorization: Bearer <CRON_SECRET>`
 
-**Khuyến nghị (Vercel Hobby):** GitHub Actions trong repo (`.github/workflows/check-views.yml`), mỗi 5 phút. Thêm **Repository secrets**:
+**Khuyến nghị (Vercel Hobby):** GitHub Actions trong repo (`.github/workflows/check-views.yml`), mỗi giờ. Thêm **Repository variable** PUBLIC_BASE_URL và **secret** CRON_SECRET:
 
 - `PUBLIC_BASE_URL` = `https://<app>.vercel.app`
 - `CRON_SECRET` = giống biến trên Vercel
