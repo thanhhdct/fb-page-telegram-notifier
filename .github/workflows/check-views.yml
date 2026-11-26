@@ -1,5 +1,6 @@
 # Meta không gửi webhook khi view tăng — repo tự gọi API quét mốc view trên Vercel.
-# Secrets (Settings → Secrets → Actions): PUBLIC_BASE_URL, CRON_SECRET (giống trên Vercel).
+# Variables: PUBLIC_BASE_URL (Settings → Variables → Actions).
+# Secrets: CRON_SECRET (Settings → Secrets → Actions, giống trên Vercel).
 
 name: Scan view milestones
 
@@ -20,12 +21,12 @@ jobs:
     steps:
       - name: Call /api/cron/check-views
         env:
-          APP_URL: ${{ secrets.PUBLIC_BASE_URL }}
+          APP_URL: ${{ vars.PUBLIC_BASE_URL || secrets.PUBLIC_BASE_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
           if [ -z "${APP_URL:-}" ] || [ -z "${CRON_SECRET:-}" ]; then
-            echo "::error::Thiếu GitHub secret PUBLIC_BASE_URL hoặc CRON_SECRET."
+            echo "::error::Thiếu PUBLIC_BASE_URL (Variables hoặc Secrets) hoặc CRON_SECRET (Secrets)."
             exit 1
           fi
           base="${APP_URL%/}"
