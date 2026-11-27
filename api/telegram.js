@@ -2,7 +2,7 @@ import { waitUntil } from '@vercel/functions';
 import { scanViewMilestones } from '../lib/viewMilestones.js';
 import { sendTelegram } from '../lib/telegram.js';
 import { VIEW_MILESTONES } from '../lib/config.js';
-import { formatMilestoneList } from '../lib/format.js';
+import { formatMilestoneRanges } from '../lib/format.js';
 
 export const config = {
   maxDuration: 60,
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     } else if (cmd === '/start' || cmd.startsWith('/start@')) {
       waitUntil(
         sendTelegram(
-          `FB Page Notifier.\nMốc view: <b>${formatMilestoneList(VIEW_MILESTONES)}</b>\n` +
+          `FB Page Notifier.\nMốc view: <b>${formatMilestoneRanges(VIEW_MILESTONES)}</b>\n` +
             'Lệnh: <code>/check</code> — quét ngay.',
           msg.chat.id
         )

@@ -6,7 +6,7 @@ import { handlePageMessagingWebhook } from '../lib/pageMessages.js';
 import { sendTelegram } from '../lib/telegram.js';
 import { getPages } from '../lib/facebook.js';
 import { VIEW_MILESTONES } from '../lib/config.js';
-import { formatMilestoneList } from '../lib/format.js';
+import { formatMilestoneRanges } from '../lib/format.js';
 
 const { PORT = 3000, CHECK_INTERVAL_MINUTES = '5' } = process.env;
 
@@ -43,7 +43,7 @@ app.post('/telegram', async (req, res) => {
     await scanViewMilestones(msg.chat.id, true);
   } else if (cmd === '/start' || cmd.startsWith('/start@')) {
     await sendTelegram(
-      `FB Page Notifier.\nMốc view: ${formatMilestoneList(VIEW_MILESTONES)}\nLệnh: /check`,
+      `FB Page Notifier.\nMốc view: ${formatMilestoneRanges(VIEW_MILESTONES)}\nLệnh: /check`,
       msg.chat.id
     );
   }

@@ -1,4 +1,5 @@
 # Meta không gửi webhook khi view tăng — repo tự gọi API quét mốc view trên Vercel.
+# Lịch: 7:00–12:00 Asia/Ho_Chi_Minh, mỗi 30 phút (cron dưới dùng UTC).
 # Variables: PUBLIC_BASE_URL (Settings → Variables → Actions).
 # Secrets: CRON_SECRET (Settings → Secrets → Actions, giống trên Vercel).
 
@@ -6,8 +7,10 @@ name: Scan view milestones
 
 on:
   schedule:
-    # Mỗi giờ (phút 0); lịch có thể trễ vài phút tùy tải Actions.
-    - cron: '0 * * * *'
+    # Giờ VN 7:00–11:30, mỗi 30 phút (UTC+7 → 0–4h UTC).
+    - cron: '0,30 0-4 * * *'
+    # 12:00 giờ VN (05:00 UTC).
+    - cron: '0 5 * * *'
   workflow_dispatch:
 
 concurrency:

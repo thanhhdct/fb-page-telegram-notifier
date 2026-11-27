@@ -1,6 +1,6 @@
 # FB Page → Telegram Notifier
 
-Gửi Telegram khi **có tin nhắn mới** trên Page hoặc khi bài viết chạm mốc **100 / 500 / 1K / 5K / 10K view** (`post_media_view`).
+Gửi Telegram khi **có tin nhắn mới** trên Page hoặc khi bài viết chạm mốc **500 / 1K / 5K / 10K, rồi 20K–200K (bước 10K)** (`post_media_view`).
 
 Hỗ trợ **deploy Vercel** (serverless + Cron) hoặc chạy local bằng Express.
 
@@ -54,7 +54,7 @@ npm run telegram:set-webhook
 `GET https://<app>.vercel.app/api/cron/check-views`  
 Header: `Authorization: Bearer <CRON_SECRET>`
 
-**Khuyến nghị (Vercel Hobby):** GitHub Actions trong repo (`.github/workflows/check-views.yml`), mỗi giờ. Thêm **Repository variable** PUBLIC_BASE_URL và **secret** CRON_SECRET:
+**Khuyến nghị (Vercel Hobby):** GitHub Actions trong repo (`.github/workflows/check-views.yml`), 7h–12h giờ VN, mỗi 30 phút. Thêm **Repository variable** PUBLIC_BASE_URL và **secret** CRON_SECRET:
 
 - `PUBLIC_BASE_URL` = `https://<app>.vercel.app`
 - `CRON_SECRET` = giống biến trên Vercel
@@ -87,7 +87,7 @@ Hoặc thủ công trên Meta: App → **Webhooks** → **Page** → Callback `h
 
 ## Lệnh Telegram
 
-- `/check` — quét mốc view 100 / 500 / 1K / 5K / 10K ngay; gửi thêm **chi tiết quét** (view API, mốc đã báo) trên Telegram  
+- `/check` — quét mốc view ngay (theo VIEW_MILESTONES)n Telegram  
 - `/start` — hướng dẫn
 
 ## License
